@@ -17,7 +17,7 @@
  *    Alexander Dohms, Stephen Costigan
  ************************************************************************/
 
-#pragma once
+#pragma once 
 
 #include <iostream>  // for OFSTREAM
 #include <cassert>
