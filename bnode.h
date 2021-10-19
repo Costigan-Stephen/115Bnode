@@ -161,7 +161,7 @@ inline void swap(BNode <T>*& pLHS, BNode <T>*& pRHS)
 template <class T>
 BNode <T> * copy(const BNode <T> * pSrc) 
 {
-	if (!pSrc)
+	if (!pSrc) 
 		return NULL;
 
 	BNode<T>* destination = new BNode<T>(pSrc->data);
