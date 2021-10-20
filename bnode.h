@@ -22,6 +22,9 @@
 #include <iostream>  // for OFSTREAM
 #include <cassert>
 
+// Steve added this since we need allocators
+#include <memory>    // For alloc
+
 /*****************************************************************
  * BNODE
  * A single node in a binary tree.  Note that the node does not know
@@ -31,20 +34,20 @@ template <class T>
 class BNode
 {
 public:
-   // 
-   // Construct
-   //
+    // 
+    // Construct
+    //
 	BNode() : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(T()) {} // Default Constructor
 	BNode(const T& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(t) {} // Copy Constructor
 	BNode(T&& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(t) {} // Move Constructor
 
-   //
-   // Data
-   //
-   BNode <T> * pLeft;
-   BNode <T> * pRight;
-   BNode <T> * pParent;
-   T data;
+    //
+    // Data
+    //
+    BNode <T> * pLeft;
+    BNode <T> * pRight;
+    BNode <T> * pParent;
+    T data;
 };
 
 /*******************************************************************
@@ -138,6 +141,7 @@ void clear(BNode <T> * & pThis)
 	clear(pThis->pLeft);
 	clear(pThis->pRight);
 	pThis = NULL;
+	delete pThis;
 }
 
 /***********************************************
@@ -190,17 +194,17 @@ void assign(BNode <T> * & pDest, const BNode <T>* pSrc)
 		clear(pDest);
 		return;
 	}
-
-	// Destination is Empty
-	if (!pDest && pSrc) {
-		pDest = new BNode<T>(pSrc->data);
+	
+	// Neither the Source nor Destination are Empty
+	if (pDest && pSrc) {
+		pDest->data = pSrc->data;
 		assign(pDest->pRight, pSrc->pRight);
 		assign(pDest->pLeft, pSrc->pLeft);
 	}
 
-	// Neither the Source nor Destination are Empty
-	if (pDest && pSrc) {
-		pDest->data = pSrc->data;
+	// Destination is Empty
+	if (!pDest && pSrc) {
+		pDest = new BNode<T>(pSrc->data);
 		assign(pDest->pRight, pSrc->pRight);
 		assign(pDest->pLeft, pSrc->pLeft);
 	}
