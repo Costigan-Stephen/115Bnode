@@ -107,7 +107,7 @@ inline void addLeft (BNode <T> * pNode, const T & t)
 template <class T, typename A = std::allocator<BNode <T>>>
 inline void addLeft(BNode <T>* pNode, T && t)
 {
-	std::allocator<BNode <T>> alloc;
+	A alloc;
 	
 	BNode<T>* pAdd = new BNode<T>(t);
 	pAdd->pParent = pNode;
