@@ -21,6 +21,7 @@
 
 #include <iostream>  // for OFSTREAM
 #include <cassert>
+#include "spy.h"
 
 // Steve added this since we need allocators
 #include <memory>    // For alloc
@@ -37,9 +38,9 @@ public:
     // 
     // Construct
     //
-	BNode() : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(T()) {} // Default Constructor
-	BNode(const T& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(t) {} // Copy Constructor
-	BNode(T&& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(t) {} // Move Constructor
+	BNode() : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(T()) {}				// Default Constructor
+	BNode(const T& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(t) {}		// Copy Constructor
+	BNode(T&& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(std::move(t)) {} // Move Constructor
 
     //
     // Data
@@ -70,13 +71,8 @@ inline size_t size(const BNode <T> * p)
 template <class T, typename A = std::allocator<BNode <T>>>
 inline void addLeft(BNode <T> * pNode, BNode <T> * pAdd)
 {
-	
 	if (pAdd)
 		pAdd->pParent = pNode;
-
-	A alloc;
-
-	pNode->pLeft = alloc.allocate(1);
 	pNode->pLeft = pAdd;
 }
 
@@ -107,11 +103,23 @@ inline void addLeft (BNode <T> * pNode, const T & t)
 template <class T, typename A = std::allocator<BNode <T>>>
 inline void addLeft(BNode <T>* pNode, T && t)
 {
-	A alloc;
+	/*T newT = (t > 0 ? t : NULL); 
+	pNode->pLeft->data = std::move(newT);*/
+	//pAdd->pParent = pNode;
+	//pNode->pLeft = pAdd;
+	//A alloc;
+	//pNode->pLeft = alloc.allocate(1);
+	//pNode->pLeft = new BNode<T>(t);
+
+	//if (pNode->pLeft)
+	//	pNode->pLeft->pParent = pNode;
 	
-	BNode<T>* pAdd = new BNode<T>(t);
-	pAdd->pParent = pNode;
-	pNode->pLeft = pAdd;
+	//pNode->pLeft->data = t;
+	//pNode->pLeft->pRight = NULL;
+	//clear(pNode->pLeft);
+	/*A alloc;
+	pNode->pLeft = alloc.allocate(1);*/
+	pNode->pLeft->data = std::move(t);
 }
 
 /******************************************************
@@ -129,9 +137,9 @@ void addRight (BNode <T> * pNode, const T & t)
 template <class T, typename A = std::allocator<BNode <T>>>
 void addRight(BNode <T>* pNode, T && t)
 {
-	BNode<T>* pAdd = new BNode<T>(t);
+	/*BNode<T>* pAdd = new BNode<T>(t);
 	pAdd->pParent = pNode;
-	pNode->pRight = pAdd;
+	pNode->pRight = pAdd;*/
 }
 
 /*****************************************************
@@ -144,6 +152,9 @@ void clear(BNode <T> * & pThis)
 {
 	if (!pThis)
 		return;
+
+	A alloc;
+	alloc.destroy(pThis + 0);
 
 	clear(pThis->pLeft);
 	clear(pThis->pRight);
