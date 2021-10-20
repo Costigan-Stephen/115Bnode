@@ -119,7 +119,7 @@ inline void addLeft(BNode <T>* pNode, T && t)
 	//clear(pNode->pLeft);
 	/*A alloc;
 	pNode->pLeft = alloc.allocate(1);*/
-	pNode->pLeft->data = std::move(t);
+	//pNode->pLeft->data = std::move(t);
 }
 
 /******************************************************
