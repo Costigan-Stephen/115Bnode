@@ -54,7 +54,7 @@ public:
  * SIZE BTREE
  * Return the size of a b-tree under the current node
  *******************************************************************/
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 inline size_t size(const BNode <T> * p)
 {
 	if (!p)
@@ -67,11 +67,16 @@ inline size_t size(const BNode <T> * p)
  * ADD LEFT
  * Add a node to the left of the current node
  ******************************************************/
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 inline void addLeft(BNode <T> * pNode, BNode <T> * pAdd)
 {
+	
 	if (pAdd)
 		pAdd->pParent = pNode;
+
+	A alloc;
+
+	pNode->pLeft = alloc.allocate(1);
 	pNode->pLeft = pAdd;
 }
 
@@ -79,7 +84,7 @@ inline void addLeft(BNode <T> * pNode, BNode <T> * pAdd)
  * ADD RIGHT
  * Add a node to the right of the current node
  ******************************************************/
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 inline void addRight (BNode <T> * pNode, BNode <T> * pAdd)
 {
 	if (pAdd)
@@ -91,7 +96,7 @@ inline void addRight (BNode <T> * pNode, BNode <T> * pAdd)
  * ADD LEFT
  * Add a node to the left of the current node
  ******************************************************/
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 inline void addLeft (BNode <T> * pNode, const T & t) 
 {
 	BNode<T>* pAdd = new BNode<T>(t);
@@ -99,9 +104,11 @@ inline void addLeft (BNode <T> * pNode, const T & t)
 	pNode->pLeft = pAdd;
 }
 
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 inline void addLeft(BNode <T>* pNode, T && t)
 {
+	std::allocator<BNode <T>> alloc;
+	
 	BNode<T>* pAdd = new BNode<T>(t);
 	pAdd->pParent = pNode;
 	pNode->pLeft = pAdd;
@@ -111,7 +118,7 @@ inline void addLeft(BNode <T>* pNode, T && t)
  * ADD RIGHT
  * Add a node to the right of the current node
  ******************************************************/
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 void addRight (BNode <T> * pNode, const T & t)
 {
 	BNode<T>* pAdd = new BNode<T>(t);
@@ -119,7 +126,7 @@ void addRight (BNode <T> * pNode, const T & t)
 	pNode->pRight = pAdd;
 }
 
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 void addRight(BNode <T>* pNode, T && t)
 {
 	BNode<T>* pAdd = new BNode<T>(t);
@@ -132,7 +139,7 @@ void addRight(BNode <T>* pNode, T && t)
  * Delete all the nodes below pThis including pThis
  * using postfix traverse: LRV
  ****************************************************/
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 void clear(BNode <T> * & pThis)
 {
 	if (!pThis)
@@ -149,7 +156,7 @@ void clear(BNode <T> * & pThis)
  * Swap the list from LHS to RHS
  *   COST   : O(1)
  **********************************************/
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 inline void swap(BNode <T>*& pLHS, BNode <T>*& pRHS)
 {
 	BNode<T>* tempHead = pRHS;
@@ -162,7 +169,7 @@ inline void swap(BNode <T>*& pLHS, BNode <T>*& pRHS)
  * Copy pSrc->pRight to pDest->pRight and
  * pSrc->pLeft onto pDest->pLeft
  *********************************************/
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 BNode <T> * copy(const BNode <T> * pSrc) 
 {
 	if (!pSrc) 
@@ -186,7 +193,7 @@ BNode <T> * copy(const BNode <T> * pSrc)
  * copy the values from pSrc onto pDest preserving
  * as many of the nodes as possible.
  *********************************************/
-template <class T>
+template <class T, typename A = std::allocator<BNode <T>>>
 void assign(BNode <T> * & pDest, const BNode <T>* pSrc)
 {
 	// Source is Empty
@@ -194,7 +201,7 @@ void assign(BNode <T> * & pDest, const BNode <T>* pSrc)
 		clear(pDest);
 		return;
 	}
-	
+
 	// Neither the Source nor Destination are Empty
 	if (pDest && pSrc) {
 		pDest->data = pSrc->data;
