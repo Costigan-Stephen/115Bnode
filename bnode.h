@@ -14,7 +14,7 @@
  *        BNode         : A class representing a BNode
  *    Additionally, it will contain a few functions working on Node
  * Author
- *    Alexander Dohms, Stephen Costigan
+ *    Alexander Dohms, Stephen Costigan, Shaun Crook, Jonathan Colwell
  ************************************************************************/
 
 #pragma once 
@@ -108,7 +108,6 @@ inline void addLeft(BNode <T>* pNode, T && t)
 	alloc.construct(pAdd, std::move(t));
 	pAdd->pParent = pNode;
 	pNode->pLeft = pAdd; 
-	
 }
 
 /******************************************************
