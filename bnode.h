@@ -1,4 +1,4 @@
-/***********************************************************************
+﻿/***********************************************************************
  * Header:
  *    BINARY NODE
  * Summary:
@@ -40,7 +40,7 @@ public:
     //
 	BNode() : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(T()) {}				// Default Constructor
 	BNode(const T& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(t) {}		// Copy Constructor
-	BNode(T&& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(std::move(t)) {} // Move Constructor
+	BNode(T&& t) : pLeft(nullptr), pRight(nullptr), data(std::move(t)) {}					// Move Constructor
 
     //
     // Data
@@ -103,23 +103,12 @@ inline void addLeft (BNode <T> * pNode, const T & t)
 template <class T, typename A = std::allocator<BNode <T>>>
 inline void addLeft(BNode <T>* pNode, T && t)
 {
-	/*T newT = (t > 0 ? t : NULL); 
-	pNode->pLeft->data = std::move(newT);*/
-	//pAdd->pParent = pNode;
-	//pNode->pLeft = pAdd;
-	//A alloc;
-	//pNode->pLeft = alloc.allocate(1);
-	//pNode->pLeft = new BNode<T>(t);
-
-	//if (pNode->pLeft)
-	//	pNode->pLeft->pParent = pNode;
+	A alloc;
+	BNode<T>* pAdd = alloc.allocate(1);
+	alloc.construct(pAdd, std::move(t));
+	pAdd->pParent = pNode;
+	pNode->pLeft = pAdd; 
 	
-	//pNode->pLeft->data = t;
-	//pNode->pLeft->pRight = NULL;
-	//clear(pNode->pLeft);
-	/*A alloc;
-	pNode->pLeft = alloc.allocate(1);*/
-	//pNode->pLeft->data = std::move(t);
 }
 
 /******************************************************
@@ -137,9 +126,11 @@ void addRight (BNode <T> * pNode, const T & t)
 template <class T, typename A = std::allocator<BNode <T>>>
 void addRight(BNode <T>* pNode, T && t)
 {
-	/*BNode<T>* pAdd = new BNode<T>(t);
+	A alloc;
+	BNode<T>* pAdd = alloc.allocate(1);
+	alloc.construct(pAdd, std::move(t));
 	pAdd->pParent = pNode;
-	pNode->pRight = pAdd;*/
+	pNode->pRight = pAdd;
 }
 
 /*****************************************************
